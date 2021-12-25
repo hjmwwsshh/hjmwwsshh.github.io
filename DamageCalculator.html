@@ -140,7 +140,7 @@
     <!--禁用自动填充-->
     <div class="titlebox">
         <div class="titleboxleft">
-            <h1 class="h1">Damage Calculator for WSGR v1.3-web</h1>
+            <h1 class="h1">Damage Calculator for WSGR v1.4-web</h1>
         </div>
         <div class="titleboxright">
             <h1 class="h1 h1_right"><a class="a" href="index.html">返回首页</a></h1> 
@@ -334,7 +334,7 @@
     </div> 
     </form>
 <script type="text/javascript">
-    var VERSION="v1.3-web"; //版本号
+    var VERSION="v1.4-web"; //版本号
     //
     var D_BATK = 0; //基础攻击力
     var D_BATK_V1 = 0;
@@ -389,7 +389,7 @@
     var Dict_atktype_enable_BATK = [ //决定要启用哪些变量来计算基础攻击力
             [1, 1, 0, 0, 0], //航空战(轰炸机)
             [1, 1, 0, 0, 0], //航空战(鱼雷机)
-            [1, 0, 0, 0, 0], //昼战反潜(轻母航战)
+            [1, 1, 1, 0, 0], //昼战反潜(轻母航战)
             [1, 1, 0, 0, 0], //昼战反潜(驱逐巡洋)
             [1, 1, 1, 1, 1], //昼战炮击(航母系)
             [1, 0, 0, 0, 0], //昼战炮击(其他)
@@ -398,15 +398,15 @@
             [1, 1, 0, 0, 0], //夜战巡洋舰炮雷合击
             [1, 0, 0, 0, 0], //夜战巡洋舰炮击
             [1, 0, 0, 0, 0], //夜战其他炮击
-            [1, 1, 1, 0, 0], //导弹战
-            [1, 1, 1, 0, 0] //夜战导弹
+            [1, 0, 1, 0, 0], //导弹战
+            [1, 0, 1, 0, 0] //夜战导弹
         ];
     var Dict_atktype_label = [ //基础攻击力的标签说明
             ["放飞机数：", "该格轰炸：", "不可用", "不可用", "不可用"],			//航空战(轰炸机)
             ["放飞机数：", "该格鱼雷：", "不可用", "不可用", "不可用"],			//航空战(鱼雷机)
-            ["舰船对潜：", "不可用", "不可用", "不可用", "不可用"],				//昼战反潜(轻母航战)
+            ["舰船对潜：", "装备对潜：", "索敌：", "不可用", "不可用"],			//昼战反潜(轻母航战)
             ["舰船对潜：", "深弹对潜：", "不可用", "不可用", "不可用"],			//昼战反潜(驱逐巡洋)
-            ["火力：", "轰炸：", "鱼雷：", "对方总对空值：", "系数α(0~1)："],	//昼战炮击(航母系) 
+            ["火力：", "轰炸：", "鱼雷：", "对方总对空值：", "系数α(0~1)："],	    //昼战炮击(航母系) 
             ["火力：", "不可用", "不可用", "不可用", "不可用"],					//昼战炮击(其他)
             ["鱼雷：", "不可用", "不可用", "不可用", "不可用"],					//昼战雷击
             ["鱼雷：", "不可用", "不可用", "不可用", "不可用"],					//夜战雷击
@@ -422,7 +422,7 @@
     var Dict_atktype_enable_I = [
             [0, 0, 1, 0, 1, 0, 1, 1, 1, 1], //航空战(轰炸机)
             [0, 0, 1, 0, 1, 1, 1, 1, 1, 1], //航空战(鱼雷机)
-            [0, 0, 0, 1, 1, 0, 0, 1, 1, 1], //昼战反潜(轻母航战
+            [0, 0, 0, 0, 1, 0, 1, 1, 1, 1], //昼战反潜(轻母航战
             [0, 0, 0, 1, 1, 0, 1, 1, 1, 1], //昼战反潜(驱逐巡洋)
             [0, 0, 1, 0, 1, 0, 0, 1, 1, 1], //昼战炮击(航母系)
             [1, 1, 0, 0, 1, 0, 1, 1, 1, 1], //昼战炮击(其他)
@@ -551,19 +551,19 @@
             ]
         ];
     var Dict_I_pene = [ //不同攻击类型的穿甲系数表
-            1.0, //航空战(轰炸机)
-            2.0, //航空战(鱼雷机)
-            2.0, //昼战反潜(轻母航战)
-            2.0, //昼战反潜(驱逐巡洋)
-            1.0, //昼战炮击(航母系) 
-            0.6, //昼战炮击(其他)
-            1.0, //昼战雷击
-            1.0, //夜战雷击
-            1.0, //夜战巡洋舰炮雷合击
-            0.6, //夜战巡洋舰炮击
-            0.6, //夜战其他炮击
-            0.9, //导弹战
-            0.9  //夜战导弹
+            1.0,    //航空战(轰炸机)
+            2.0,    //航空战(鱼雷机)
+            10.0,   //昼战反潜(轻母航战)
+            2.0,    //昼战反潜(驱逐巡洋)
+            1.0,    //昼战炮击(航母系) 
+            0.6,    //昼战炮击(其他)
+            1.0,    //昼战雷击
+            1.0,    //夜战雷击
+            0.8,    //夜战巡洋舰炮雷合击
+            0.6,    //夜战巡洋舰炮击
+            0.6,    //夜战其他炮击
+            0.0,    //导弹战
+            1.0     //夜战导弹
         ];
     var Dict_Percent_cansunk = [ //击沉率结果表
             [ //未暴击
@@ -820,8 +820,8 @@
                 document.getElementById("lbl_formula").innerText = "ln( " + D_BATK_V1 + " + 1 ) × 2 × " + D_BATK_V2 + " + 25";
                 BATK_Cal(1);
                 break;
-            case 2: //反潜(轻母航战):	舰船对潜 / 3 + 30
-                document.getElementById("lbl_formula").innerText = D_BATK_V1 + " ÷ 3 + 30";
+            case 2: //反潜(轻母航战):	基础对潜 + 装备对潜 * 2 + 索敌 / 2
+                document.getElementById("lbl_formula").innerText =  D_BATK_V1 + " + " + D_BATK_V2 + " × 2 + " + D_BATK_V2 + " ÷ 2 + 30";
                 BATK_Cal(2);
                 break;
             case 3: //反潜(驱逐巡洋):舰船对潜 / 3 + 深弹对潜 * 1.3 + 30 (有深弹); 舰船对潜 / 3 (无深弹)
@@ -862,11 +862,11 @@
                 document.getElementById("lbl_formula").innerText = D_BATK_V1 + " + 10";
                 BATK_Cal(10);
                 break;
-            case 11: //导弹战:舰船裸火力 + 发射器火力 + 导弹火力 * 3	每格导弹单独计算不叠加
+            case 11: //导弹战:舰船裸火力 + 导弹火力 * 3	每格导弹单独计算不叠加
                 document.getElementById("lbl_formula").innerText = D_BATK_V1 + " + " + D_BATK_V2 + " + " + D_BATK_V3 + " × 3"
                 BATK_Cal(11);
                 break;
-            case 12: //夜战导弹:舰船裸火力 + 发射器火力 + 导弹火力 * 3	每格导弹单独计算不叠加
+            case 12: //夜战导弹:舰船裸火力 + 导弹火力 * 3	每格导弹单独计算不叠加
                 document.getElementById("lbl_formula").innerText
                 BATK_Cal(12);
                 break;
@@ -883,7 +883,7 @@
                 D_BATK = Math.log(Number(D_BATK_V1) + 1) * 2 * Number(D_BATK_V2) + 25;
                 break;
             case 2: //反潜(轻母航战)
-                D_BATK = Number(D_BATK_V1) / 3 + 30;
+                D_BATK = Number(D_BATK_V1) + Number(D_BATK_V2) * 2 + Number(D_BATK_V3) / 2 + 30;
                 break;
             case 30: //反潜(驱逐巡洋)无深弹
                 D_BATK = Number(D_BATK_V1) / 3;
@@ -935,7 +935,7 @@
                 D_I_tmp = Number(D_I_tb) * Number(D_I_airdomain) *  Number(D_I_ammo) * Number(D_I_sufferdmg) * Number(D_I_skill);
                 break;
             case 2: //反潜(轻母航战)
-                document.getElementById("lbl_I_formula").innerText = "声呐系数 × 弹药系数 × 浮动系数 × 暴击系数 × 技能攻击力系数";
+                document.getElementById("lbl_I_formula").innerText = "弹药系数 × 舰损系数 × 浮动系数 × 暴击系数 × 技能攻击力系数";
                 I_sonar_cal(0);
                 document.getElementById("lbl_I_sonar_result").innerText =  "1 + 声呐反潜值 ÷ 15 = " + D_I_sonar.toFixed(3);
                 D_I_tmp = Number(D_I_sonar) * Number(D_I_ammo) * Number(D_I_skill);
@@ -1014,7 +1014,12 @@
         document.getElementById("lbl_pene_result").innerText = D_I_pene;
     };
     function I_enemyarmordecreasedamage_cal() { //计算敌方装甲减伤系数
-        D_I_enemyarmordecreasedamage = 1 / Math.sqrt( 1 + Math.pow( Number(D_armor/(65*D_I_pene)) , 5.4 ));
+        if (D_armor >= 50) {
+			D_I_enemyarmordecreasedamage = Math.max((( D_armor - 150 + 0.001 ) ** 2 ) / 12500 + D_I_pene , 0.1 )    //函数不知道为什么有瑕点，所以我偏移了0.001
+		};
+		else {
+			D_I_enemyarmordecreasedamage = Math.max( 1 - (( D_armor + 0.001 ) ** 2 ) / 12500 + D_I_pene , 0.1 )
+		};
     };
     //////////////////////////////////////////////////////////////////////////////////
     function select_I_val(CMB_atktype_i) { //根据攻击类型来设置要使用的系数，并初始化系数的值
